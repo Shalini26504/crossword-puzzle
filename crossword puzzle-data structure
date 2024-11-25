@@ -1,0 +1,54 @@
+#include <stdio.h>
+        }
+        for (int i = 0; i < length; i++) {
+            grid[word->row][word->col + i] = word->word[i];
+        }
+    } else if (word->direction == 'V') {
+        if (word->row + length > GRID_SIZE) {
+            return 0; // Word does not fit vertically
+        }
+        for (int i = 0; i < length; i++) {
+            grid[word->row + i][word->col] = word->word[i];
+        }
+    } else {
+        return 0; // Invalid direction
+    }
+    return 1; // Word placed successfully
+}
+
+int main() {
+    char grid[GRID_SIZE][GRID_SIZE];
+    CrosswordWord words[MAX_WORDS];
+    int wordCount = 0;
+
+    initializeGrid(grid);
+
+    printf("Enter words for the crossword puzzle (type 'done' to finish):\n");
+    while (wordCount < MAX_WORDS) {
+        printf("Enter word: ");
+        scanf("%s", words[wordCount].word);
+
+        if (strcmp(words[wordCount].word, "done") == 0) {
+            break;
+        }
+
+        printf("Enter row (0-%d): ", GRID_SIZE - 1);
+        scanf("%d", &words[wordCount].row);
+        printf("Enter column (0-%d): ", GRID_SIZE - 1);
+        scanf("%d", &words[wordCount].col);
+        printf("Enter direction (H for horizontal, V for vertical): ");
+        scanf(" %c", &words[wordCount].direction);
+
+        if (!placeWord(grid, &words[wordCount])) {
+            printf("Error: Word does not fit or invalid direction.\n");
+            continue;
+        }
+
+        wordCount++;
+    }
+
+    printf("\nCrossword Puzzle:\n");
+    displayGrid(grid);
+
+    return 0;
+}
